@@ -1,0 +1,327 @@
+/* ---------- Projects: spacing + number ---------- */
+.project + .project {
+  margin-top: 120px;
+  padding-top: 120px;
+  border-top: 1px solid rgba(26, 29, 35, 0.1);
+}
+
+.project-number {
+  display: block;
+  margin-bottom: 20px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: #c98a3b;
+}
+
+/* ---------- Apex Advisory: self-playing browser ---------- */
+.browser {
+  background: #f7f5f0;
+  border: 1px solid rgba(26, 29, 35, 0.1);
+  overflow: hidden;
+}
+
+.browser-top {
+  display: flex;
+  align-items: flex-end;
+  gap: 18px;
+  padding: 10px 14px 0;
+}
+
+.browser-dots {
+  display: flex;
+  gap: 6px;
+  padding-bottom: 12px;
+}
+
+.browser-dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1px solid rgba(26, 29, 35, 0.25);
+}
+
+.browser-tabs {
+  position: relative;
+  display: flex;
+  gap: 2px;
+  min-width: 0;
+}
+
+.browser-tab {
+  padding: 8px 14px 10px;
+  border: none;
+  background: transparent;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  color: rgba(26, 29, 35, 0.45);
+  white-space: nowrap;
+  cursor: pointer;
+  /* waits for the fake cursor to arrive before lighting up */
+  transition: background 0.25s ease 0.4s, color 0.25s ease 0.4s;
+}
+
+.browser-tab:hover {
+  color: #1a1d23;
+}
+
+.browser-tab.is-active {
+  background: #ffffff;
+  color: #1a1d23;
+}
+
+/* Fake cursor */
+.browser-cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  pointer-events: none;
+  transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.18));
+}
+
+.browser-cursor svg {
+  display: block;
+  margin: -3px 0 0 -3px;
+}
+
+/* Little ring when the cursor "clicks" */
+.browser-click {
+  position: absolute;
+  top: -9px;
+  left: -9px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid #c98a3b;
+  animation: cursor-click 0.5s ease-out 0.5s both;
+}
+
+/* Address bar */
+.browser-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  background: #ffffff;
+  border-bottom: 1px solid rgba(26, 29, 35, 0.08);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: rgba(26, 29, 35, 0.45);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.browser-url {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.browser-path {
+  color: #1a1d23;
+}
+
+.browser-caret {
+  flex-shrink: 0;
+  width: 1px;
+  height: 12px;
+  margin-left: -6px;
+  background: #c98a3b;
+  animation: caret-blink 1s steps(1) infinite;
+}
+
+.browser-loading {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 2px;
+  background: #c98a3b;
+  transform-origin: left;
+  animation: browser-load 0.9s ease 0.45s both;
+}
+
+/* Screen with the page screenshots */
+.browser-screen {
+  position: relative;
+  aspect-ratio: 1478 / 728;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.browser-page {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  transform-origin: center top;
+  opacity: 0;
+}
+
+.browser-page.is-previous {
+  z-index: 1;
+  opacity: 1;
+  transform: scale(1.03);
+}
+
+.browser-page.is-current {
+  z-index: 2;
+  opacity: 1;
+  animation:
+    page-reveal 0.8s cubic-bezier(0.7, 0, 0.2, 1) 0.6s both,
+    page-drift 4s ease-out 0.6s both;
+}
+
+/* Line under the browser that fills until the next page */
+.browser-timeline {
+  height: 1px;
+  margin-top: 14px;
+  background: rgba(26, 29, 35, 0.1);
+  overflow: hidden;
+}
+
+.browser-timeline span {
+  display: block;
+  height: 100%;
+  background: #1a1d23;
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.browser-timeline span.is-running {
+  animation: browser-timeline var(--duration) linear both;
+}
+
+/* "AUTO-PLAYING" / "PAUSED" label */
+.browser-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.browser-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #c98a3b;
+  animation: status-pulse 1.6s ease-in-out infinite;
+}
+
+.browser-status.is-paused .browser-status-dot {
+  background: rgba(26, 29, 35, 0.3);
+  animation: none;
+}
+
+/* ---------- Animations ---------- */
+@keyframes page-reveal {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes page-drift {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.03);
+  }
+}
+
+@keyframes browser-load {
+  0% {
+    transform: scaleX(0);
+    opacity: 1;
+  }
+  80% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleX(1);
+    opacity: 0;
+  }
+}
+
+@keyframes browser-timeline {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes cursor-click {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes status-pulse {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+/* ---------- Phones ---------- */
+@media (max-width: 700px) {
+  .project + .project {
+    margin-top: 70px;
+    padding-top: 70px;
+  }
+
+  .browser-dots,
+  .browser-cursor {
+    display: none;
+  }
+
+  .browser-top {
+    padding: 8px 8px 0;
+  }
+
+  .browser-tabs {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .browser-tab {
+    padding: 7px 10px 9px;
+    font-size: 9px;
+  }
+}
+
+/* ---------- People who turn off animations ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .browser-page.is-current,
+  .browser-loading,
+  .browser-click,
+  .browser-caret,
+  .browser-status-dot,
+  .browser-timeline span.is-running {
+    animation: none;
+  }
+
+  .browser-cursor,
+  .browser-tab {
+    transition: none;
+  }
+}
